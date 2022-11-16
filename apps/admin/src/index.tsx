@@ -22,7 +22,7 @@ const httpClient = (url: string, options: fetchUtils.Options = {}) => {
 const theme = { palette: { mode: 'dark' as const } };
 const dataProvider = crudProvider('http://localhost:3000/v1/admin/entities', httpClient);
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Admin theme={theme} dataProvider={dataProvider} authProvider={authProvider}>
       <Resource name="books" list={BookList} />

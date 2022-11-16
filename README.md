@@ -20,7 +20,7 @@ yarn install && yarn build
 4. Start Docker containers & ensure they're running
 ```console
 docker compose up -d 
-docker compose logs --follow
+docker compose logs --follow (Optional)
 ```
 
 5. Start API on port 3000 & React App on port 4200
