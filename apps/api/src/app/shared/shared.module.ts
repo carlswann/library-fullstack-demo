@@ -7,9 +7,12 @@ import {
   AnalyticsService,
   MailService,
   OrganizationRepository,
+  BookRepository,
+  ReservationRepository, 
+  ShortlistedBookRepository
 } from '@nest-starter/core';
 
-const DAL_MODELS = [UserRepository, OrganizationRepository];
+const DAL_MODELS = [UserRepository, BookRepository, ReservationRepository, ShortlistedBookRepository, OrganizationRepository];
 
 const dalService = new DalService();
 export const ANALYTICS_SERVICE = 'AnalyticsService';

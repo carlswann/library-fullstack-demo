@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { plainToClass } from 'class-transformer';
-import { ClassType } from 'class-transformer/ClassTransformer';
-import { Document, Model } from 'mongoose';
+import { ClassConstructor } from 'class-transformer';
+import { Document, Model, ProjectionType } from 'mongoose';
 
 export class BaseRepository<T> {
   public _model: Model<any & Document>;
 
-  constructor(protected MongooseModel: Model<any & Document>, protected entity: ClassType<T>) {
+  constructor(protected MongooseModel: Model<any & Document>, protected entity: ClassConstructor<T>) {
     this._model = MongooseModel;
   }
 
@@ -18,14 +18,14 @@ export class BaseRepository<T> {
     return await this.MongooseModel.aggregate(query);
   }
 
-  async findById(id: string, select?: keyof T): Promise<T | null> {
+  async findById(id: string, select?: ProjectionType<T>): Promise<T | null> {
     const data = await this.MongooseModel.findById(id, select);
     if (!data) return null;
 
     return this.mapEntity(data.toObject());
   }
 
-  async findOne(query: any, select?: keyof T) {
+  async findOne(query: any, select?: ProjectionType<T>) {
     const data = await this.MongooseModel.findOne(query, select);
     if (!data) return null;
 
@@ -57,7 +57,7 @@ export class BaseRepository<T> {
   }
 
   async createMany(data: T[]) {
-    await new Promise((resolve) => {
+    await new Promise<void>((resolve) => {
       this.MongooseModel.collection.insertMany(data, (err) => {
         resolve();
       });
@@ -75,9 +75,10 @@ export class BaseRepository<T> {
       multi: true,
     });
 
+    saved
     return {
-      matched: saved.nMatched,
-      modified: saved.nModified,
+      matched: saved.matchedCount,
+      modified: saved.modifiedCount,
     };
   }
 

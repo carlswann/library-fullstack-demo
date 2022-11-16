@@ -82,12 +82,14 @@ export class AuthController {
 
   @Post('/login')
   async userLogin(@Body() body: LoginBodyDto) {
-    return await this.loginUsecase.execute(
+    const authToken = await this.loginUsecase.execute(
       LoginCommand.create({
         email: body.email,
         password: body.password,
       })
     );
+
+    return { data: authToken };
   }
 
   @Get('/test/token/:userId')

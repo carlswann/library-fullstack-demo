@@ -3,13 +3,12 @@ import { CrudRequest, CreateManyDto, CrudService } from '@nestjsx/crud';
 import { Model } from 'mongoose';
 
 export class MongooseCrudService<T> extends CrudService<T> {
-  constructor(public model: Model<never>) {
+  constructor(public model: Model<any>) {
     super();
   }
 
   buildQuery(req: CrudRequest) {
     const { limit = 10, page = 1, filter = [], fields = [], sort = [], join = [], paramsFilter = [] } = req.parsed;
-
     let { offset: skip = 0 } = req.parsed;
     if (page > 1) {
       skip = (page - 1) * limit;
@@ -27,7 +26,7 @@ export class MongooseCrudService<T> extends CrudService<T> {
 
     const where = filter.reduce((acc, { field, operator, value }) => {
       let cond = null;
-      switch (operator) {
+      switch (operator as any) {
         case 'starts':
           cond = new RegExp(`^${value}`, 'i');
           break;
@@ -35,6 +34,7 @@ export class MongooseCrudService<T> extends CrudService<T> {
           cond = new RegExp(`${value}$`, 'i');
           break;
         case 'cont':
+        case '$contL':
           cond = new RegExp(`${value}`, 'i');
           break;
         case 'excl':
@@ -55,11 +55,16 @@ export class MongooseCrudService<T> extends CrudService<T> {
           break;
         }
         default:
-          cond = { [`$${operator}`]: value };
+          cond = { [`${operator.startsWith('$') ? '' : '$'}${operator}`]: value };
       }
+
       acc[field] = cond;
       return acc;
     }, {});
+
+    if (req.parsed.authPersist) {
+      Object.assign(where, req.parsed.authPersist);
+    }
 
     const idParam = paramsFilter.find((v) => v.field === 'id');
     return { options, where, id: idParam ? idParam.value : null };
@@ -113,11 +118,14 @@ export class MongooseCrudService<T> extends CrudService<T> {
       this.throwNotFoundException(this.model.modelName);
     }
 
-    return data;
+    return JSON.parse(JSON.stringify(data));
   }
 
   async createOne(req: CrudRequest, dto: T): Promise<T> {
-    return await this.model.create(dto);
+    return await this.model.create({
+      ...dto,
+      ...(req.parsed.authPersist ?? {})
+    });
   }
 
   async createMany(req: CrudRequest, dto: CreateManyDto<never>): Promise<T[]> {
@@ -134,7 +142,7 @@ export class MongooseCrudService<T> extends CrudService<T> {
       this.throwNotFoundException(this.model.modelName);
     }
 
-    return data;
+    return JSON.parse(JSON.stringify(data));
   }
 
   async replaceOne(req: CrudRequest, dto: T): Promise<T> {
@@ -162,6 +170,6 @@ export class MongooseCrudService<T> extends CrudService<T> {
 
     await this.model.findByIdAndDelete(id);
 
-    return data;
+    return JSON.parse(JSON.stringify(data));
   }
 }

@@ -16,9 +16,11 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
 
     return next.handle().pipe(
       map((data) => {
-        return {
-          data: isObject(data) ? this.transformResponse(data) : data,
-        };
+        if (isArray((data as any)?.data)) {
+          return data;
+        }
+
+        return isObject(data) ? this.transformResponse(data) : data;
       })
     );
   }

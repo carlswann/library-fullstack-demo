@@ -3,8 +3,10 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "baseUrl": ".",
+    "skipLibCheck": true,
     "paths": {
     }
+
   },
   "types": [
     "node",

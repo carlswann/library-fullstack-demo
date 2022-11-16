@@ -1,0 +1,1 @@
+mongorestore --gzip /mongo-dump

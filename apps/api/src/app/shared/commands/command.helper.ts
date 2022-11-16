@@ -1,10 +1,10 @@
 import { plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
-import { ClassType } from 'class-transformer/ClassTransformer';
+import { ClassConstructor } from 'class-transformer';
 import { BadRequestException, flatten } from '@nestjs/common';
 
 export class CommandHelper {
-  static create<T>(command: ClassType<T>, data: object): T {
+  static create<T>(command: ClassConstructor<T>, data: object): T {
     const convertedObject = plainToClass<T, object>(command, {
       ...data,
     });

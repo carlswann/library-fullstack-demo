@@ -3,6 +3,7 @@
     "strictNullChecks": false,
     "declaration": true,
     "noImplicitAny": false,
+    "skipLibCheck": true,
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,

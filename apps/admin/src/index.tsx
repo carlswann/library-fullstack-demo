@@ -1,12 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './index.css';
+import { createRoot } from 'react-dom/client';
 import { fetchUtils } from 'ra-core';
 import { Admin, Resource } from 'react-admin';
-import * as serviceWorker from './serviceWorker';
-import { UserCreate, UserEdit, UserIcon, UserList } from './containers/users';
+import { BookList } from './containers/books';
+import { ShortlistedBookCreate, ShortlistedBookList } from './containers/shortlisted-books';
 import crudProvider from 'ra-data-nestjsx-crud'
 import { authProvider } from './authProvider';
+import { ReservationCreate, ReservationList } from './containers/reservations';
 
 const httpClient = (url: string, options: fetchUtils.Options = {}) => {
   if (!options.headers) {
@@ -18,19 +19,15 @@ const httpClient = (url: string, options: fetchUtils.Options = {}) => {
   return fetchUtils.fetchJson(url, options);
 };
 
+const theme = { palette: { mode: 'dark' as const } };
 const dataProvider = crudProvider('http://localhost:3000/v1/admin/entities', httpClient);
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Admin dataProvider={dataProvider} authProvider={authProvider}>
-      <Resource name="users" list={UserList} edit={UserEdit} create={UserCreate} icon={UserIcon}/>
+    <Admin theme={theme} dataProvider={dataProvider} authProvider={authProvider}>
+      <Resource name="books" list={BookList} />
+      <Resource name="shortlisted-books" list={ShortlistedBookList} create={ShortlistedBookCreate} options={{ label: 'Shortlist' }} />
+      <Resource name="reservations" list={ReservationList} create={ReservationCreate} />
     </Admin>
   </React.StrictMode>,
-  document.getElementById('root')
 );
-
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();

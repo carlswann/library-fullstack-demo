@@ -31,14 +31,7 @@ export class OrganizationRepository extends BaseRepository<OrganizationEntity> {
   }
 
   async getOrganizationMembers(organizationId: string) {
-    const organization = await Organization.findById(organizationId)
-      .populate('members.user', 'firstName lastName email _id')
-      .select('members');
-
-    if (!organization) return [];
-
-    const organizationEntity = this.mapEntity(organization);
-    return organizationEntity.members;
+     return [];
   }
 
   async findUserActiveOrganizations(userId: string): Promise<OrganizationEntity[]> {
@@ -85,23 +78,7 @@ export class OrganizationRepository extends BaseRepository<OrganizationEntity> {
   }
 
   async findInviteeByEmail(organizationId: string, email: string): Promise<MemberEntity> {
-    const foundOrganization = await Organization.findOne(
-      {
-        _id: organizationId,
-      },
-      {
-        _id: 1,
-        members: {
-          $elemMatch: {
-            memberStatus: MemberStatusEnum.INVITED,
-            'members.invite.email': email,
-          },
-        },
-      }
-    );
-
-    if (!foundOrganization || !foundOrganization.members.length) return null;
-    return foundOrganization.members[0];
+    return null;
   }
 
   async addMember(organizationId: string, member: IAddMemberData): Promise<void> {
@@ -123,35 +100,10 @@ export class OrganizationRepository extends BaseRepository<OrganizationEntity> {
   }
 
   async isMemberOfOrganization(organizationId: string, userId: string): Promise<boolean> {
-    return !!(await Organization.findOne(
-      {
-        _id: organizationId,
-        'members._userId': userId,
-      },
-      '_id'
-    ));
+    return !false;
   }
 
   async findMemberByUserId(organizationId: string, userId: string): Promise<MemberEntity> {
-    const organization = await Organization.findOne(
-      {
-        _id: organizationId,
-        'members._userId': userId,
-      },
-      {
-        _id: 1,
-        members: {
-          $elemMatch: {
-            _userId: userId,
-          },
-        },
-      }
-    );
-    if (!organization) return null;
-
-    const member = organization.members[0];
-    if (!member) return null;
-
-    return this.mapEntity(member) as never;
+    return null;
   }
 }

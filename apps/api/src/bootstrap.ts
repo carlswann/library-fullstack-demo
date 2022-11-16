@@ -26,7 +26,7 @@ export async function bootstrap(): Promise<INestApplication> {
     origin: process.env.NODE_ENV === 'dev' ? '*' : [process.env.FRONT_BASE_URL],
     preflightContinue: false,
     allowedHeaders: ['Content-Type', 'Authorization'],
-    methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });
 
   app.setGlobalPrefix('v1');

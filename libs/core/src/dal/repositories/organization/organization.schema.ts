@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import { models, model } from 'mongoose';
 import { Schema, Document } from 'mongoose';
 import { schemaOptions } from '../schema-default.options';
 import { OrganizationEntity } from './organization.entity';
@@ -49,5 +49,4 @@ interface IOrganizationDocument extends OrganizationEntity, Document {
   _id: never;
 }
 
-export const Organization =
-  mongoose.models.Organization || mongoose.model<IOrganizationDocument>('Organization', organizationSchema);
+export const Organization = models.Organization || model<IOrganizationDocument>('Organization', organizationSchema);

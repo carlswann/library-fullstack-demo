@@ -30,7 +30,7 @@
     "bluebird": "^3.7.2",
     "bull": "^3.13.0",
     "bull-arena": "^3.2.2",
-    "class-transformer": "^0.3.1",
+    "class-transformer": "0.5.1",
     "cross-fetch": "^3.0.4",
     "event-stream": "^4.0.1",
     "faker": "^5.1.0",
@@ -39,19 +39,19 @@
     "intercom-client": "^2.11.0",
     "jsonfile": "^6.0.1",
     "mixpanel": "^0.13.0",
-    "mongoose": "^5.9.15",
+    "mongoose": "6.7.2",
     "ng-intercom": "^8.0.2",
     "reflect-metadata": "^0.1.13",
     "superagent-defaults": "^0.1.14",
     "supertest": "^5.0.0",
-    "typescript": "^4.0.2",
+    "typescript": "4.9.3",
     "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.30",
     "apollo-boost": "^0.4.8",
     "nodemon": "^2.0.3",
-    "ts-node": "^9.0.0",
+    "ts-node": "10.9.1",
     "tsconfig-paths": "^3.9.0"
   }
 }
